@@ -1,36 +1,51 @@
 define([
     'jquery',
-    'splide'
-], function ($, Splide) {
+    'slick'
+], function ($) {
     'use strict';
 
     return function (config, element) {
-        var carouselElement = $(element).find('.splide')[0];
-
-        if (carouselElement) {
-            new Splide(carouselElement, {
-                type: 'loop',
-                perPage: 4,
-                perMove: 1,
-                gap: '1rem',
-                width: '100em',
-                pagination: false,
+        if (element) {
+            $(element).slick({
+                infinite: true,
+                slidesToShow: 5,
+                slidesToScroll: 1,
+                dots: false,
+                arrows: false,
                 autoplay: true,
-                interval: 4000,
-                pauseOnHover: true,
-                pauseOnFocus: false,
-                breakpoints: {
-                    1200: {
-                        perPage: 3,
+                autoplaySpeed: 3000,
+                lazyLoad: 'ondemand',
+                responsive: [
+                    {
+                        breakpoint: 1500,
+                        settings: {
+                            arrows: false,
+                            slidesToShow: 4
+                        }
                     },
-                    900: {
-                        perPage: 2,
+                    {
+                        breakpoint: 1024,
+                        settings: {
+                            arrows: false,
+                            slidesToShow: 3
+                        }
                     },
-                    600: {
-                        perPage: 1,
+                    {
+                        breakpoint: 768,
+                        settings: {
+                            arrows: false,
+                            slidesToShow: 2
+                        }
                     },
-                }
-            }).mount();
+                    {
+                        breakpoint: 500,
+                        settings: {
+                            arrows: false,
+                            slidesToShow: 1
+                        }
+                    }
+                ]
+            });
         }
     };
 });

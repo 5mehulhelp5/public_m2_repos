@@ -39,6 +39,7 @@ class InlineEdit extends Action
                 $error = true;
             } else {
                 foreach (array_keys($postItems) as $entityId) {
+                    /** load your model to update the data */
                     $model = $this->imageFactory->create()->load($entityId);
                     try {
                         $itemData = $postItems[$entityId];

@@ -47,6 +47,9 @@ class Save extends Action
         $this->_logger = $logger;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('DreamSites_CustomerPhotos::photo');

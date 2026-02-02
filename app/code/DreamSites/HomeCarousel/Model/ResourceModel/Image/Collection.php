@@ -14,6 +14,8 @@ class Collection extends AbstractCollection
     protected $_idFieldName = 'image_id';
 
     /**
+     * Define resource model
+     *
      * @return void
      */
     protected function _construct()
@@ -22,6 +24,8 @@ class Collection extends AbstractCollection
     }
 
     /**
+     * OptionArray for records in dreamsites_blog
+     *
      * @return array
      */
     public function toOptionIdArray()

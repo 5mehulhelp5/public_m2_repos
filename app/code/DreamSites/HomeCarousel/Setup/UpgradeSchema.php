@@ -20,7 +20,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '1.0.2', '<')) {
+        if (version_compare($context->getVersion(), '1.0.1', '<')) {
             $connection = $setup->getConnection();
 
             $column = [
@@ -32,10 +32,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'unsigned' => true,
             ];
             $connection->addColumn($setup->getTable('dreamsites_carousel'), 'sort_order', $column);
-        }
-
-        if (version_compare($context->getVersion(), '1.0.4', '<')) {
-            $connection = $setup->getConnection();
 
             $column = [
                 'type' => Table::TYPE_SMALLINT,
@@ -46,10 +42,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'unsigned' => true,
             ];
             $connection->addColumn($setup->getTable('dreamsites_carousel'), 'position', $column);
-        }
-
-        if (version_compare($context->getVersion(), '1.0.6', '<')) {
-            $connection = $setup->getConnection();
 
             $column = [
                 'type' => Table::TYPE_TEXT,
@@ -86,23 +78,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'length' => 255,
             ];
             $connection->addColumn($setup->getTable('dreamsites_carousel'), 'title_colour', $column);
-        }
-
-        if (version_compare($context->getVersion(), '1.0.7', '<')) {
-            $connection = $setup->getConnection();
-
-            $column = [
-                'type' => Table::TYPE_TEXT,
-                'nullable' => true,
-                'comment' => 'Left, Centre or Right',
-                'after' => 'sort_order',
-                'length' => 255,
-            ];
-            $connection->addColumn($setup->getTable('dreamsites_carousel'), 'position', $column);
-        }
-
-        if (version_compare($context->getVersion(), '1.0.8', '<')) {
-            $connection = $setup->getConnection();
 
             $column = [
                 'type' => Table::TYPE_TEXT,
@@ -110,6 +85,31 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment' => 'Top, Middle or Bottom',
                 'after' => 'position',
                 'length' => 255,
+            ];
+            $connection->addColumn($setup->getTable('dreamsites_carousel'), 'vertical_position', $column);
+        }
+
+        if (version_compare($context->getVersion(), '1.0.2', '<')) {
+            $connection = $setup->getConnection();
+
+            $connection->dropColumn($setup->getTable('dreamsites_carousel'), 'position');
+            $connection->dropColumn($setup->getTable('dreamsites_carousel'), 'vertical_position');
+
+            $column = [
+                'type' => Table::TYPE_SMALLINT,
+                'nullable' => false,
+                'comment' => 'Left 0, Centre 1 or Right 2',
+                'after' => 'sort_order',
+                'default' => 0,
+            ];
+            $connection->addColumn($setup->getTable('dreamsites_carousel'), 'horizontal_position', $column);
+
+            $column = [
+                'type' => Table::TYPE_SMALLINT,
+                'nullable' => false,
+                'comment' => 'Top 0, Middle 1 or Bottom 2',
+                'after' => 'horizontal_position',
+                'default' => 0,
             ];
             $connection->addColumn($setup->getTable('dreamsites_carousel'), 'vertical_position', $column);
         }

@@ -37,6 +37,9 @@ class MassDelete extends Action
         parent::__construct($context);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     protected function _isAllowed()
     {
         return $this->_authorization->isAllowed('DreamSites_CustomerPhotos::photo');

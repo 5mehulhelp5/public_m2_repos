@@ -1,0 +1,16 @@
+{
+  "name": "dreamsites/homefeatured",
+  "description": "Dream Sites Home Featured Module",
+  "keywords": ["magento2", "homefeatured"],
+  "type": "magento2-module",
+  "license": "OSL-3.0",
+  "require": {
+    "php": "~8.2"
+  },
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "DreamSites\\HomeFeatured\\": ""
+    }
+  }
+}

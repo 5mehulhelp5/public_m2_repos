@@ -46,6 +46,7 @@ class ActiveCategories implements OptionSourceInterface
                 continue;
             }
 
+            // Add indentation based on level for better visualization
             $level = (int)$category->getLevel();
             $indent = str_repeat('--', max(0, $level - 2));
 

@@ -14,6 +14,8 @@ class Collection extends AbstractCollection
     protected $_idFieldName = 'image_id';
 
     /**
+     * Define resource model
+     *
      * @return void
      */
     protected function _construct()

@@ -5,6 +5,8 @@
 namespace DreamSites\HomeCarousel\Model\ResourceModel;
 
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 
 class Image extends AbstractDb
 {
@@ -17,20 +19,22 @@ class Image extends AbstractDb
     /**
      * Construct
      *
-     * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $date
-     * @param string $connectionName
+     * @param Context $context
+     * @param DateTime $date
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        string $connectionName = null
+        ?string $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_date = $date;
     }
 
     /**
+     * Initialize resource model
+     *
      * @return void
      */
     protected function _construct()
@@ -39,6 +43,8 @@ class Image extends AbstractDb
     }
 
     /**
+     * Process page data before saving
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -100,9 +106,9 @@ class Image extends AbstractDb
         return $image->getCarouselName();
     }
 
-    public function getPosition(\DreamSites\HomeCarousel\Model\Image $image)
+    public function getHorizontalPosition(\DreamSites\HomeCarousel\Model\Image $image)
     {
-        return $image->getPosition();
+        return $image->getHorizontalPosition();
     }
 
     public function getSortOrder(\DreamSites\HomeCarousel\Model\Image $image)

@@ -52,6 +52,8 @@ class Edit extends Action
     }
 
     /**
+     * Edit Photo item. Forward to new action.
+     *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

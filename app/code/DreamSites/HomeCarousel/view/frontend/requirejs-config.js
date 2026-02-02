@@ -1,19 +1,17 @@
+/**
+ * RequireJS configuration for DreamSites HomeCarousel module
+ * Loads Slick slider library with jQuery dependencies
+ */
 var config = {
     map: {
         '*': {
-            splide: 'DreamSites_HomeCarousel/js/splide.min'
+            'slick': 'DreamSites_HomeCarousel/js/slick.min'
         }
     },
     shim: {
-        'DreamSites_HomeCarousel/js/splide.min': {
-            exports: 'Splide'
-        }
-    },
-    config: {
-        text: {
-            headers: {
-                'Accept': 'text/plain'
-            }
+        'DreamSites_HomeCarousel/js/slick.min': {
+            deps: ['jquery'],
+            exports: 'jQuery.fn.slick'
         }
     }
 };

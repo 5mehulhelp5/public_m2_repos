@@ -24,13 +24,15 @@ class Image extends AbstractDb
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
         \Magento\Framework\Stdlib\DateTime\DateTime $date,
-        string $connectionName = null
+        ?string $connectionName = null
     ) {
         parent::__construct($context, $connectionName);
         $this->_date = $date;
     }
 
     /**
+     * Initialize resource model
+     *
      * @return void
      */
     protected function _construct()
@@ -39,6 +41,8 @@ class Image extends AbstractDb
     }
 
     /**
+     * Process page data before saving
+     *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException

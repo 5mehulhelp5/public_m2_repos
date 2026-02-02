@@ -1,0 +1,131 @@
+<?php
+$imageList = $block->getFeaturedImages();
+?>
+<section id="home-featured">
+    <?php foreach($imageList as $item): ?>
+        <?php if ($item->getSortOrder() == 1) { ?>
+<!--            left column-->
+            <div class="featured__items--img">
+                <?php if (!empty($item->getUrl())) { ?>
+                    <a href="<?= $block->escapeUrl($item->getUrl()) ?>" class="featured--items__link">
+                <?php } ?>
+                <img src="<?= $block->escapeUrl($item->getMediaPath()) ?>" alt="<?= $block->escapeHtml($item->getImageAlt()) ?>" />
+                <div class="featured--items__container">
+                    <?php if (!empty($item->getHeading())) { ?>
+                        <span class="featured__items--content__subtitle" style="color:<?=$item->getHeadingColour() ?>"><?= strip_tags($item->getHeading(), '<br>') ?></span>
+                    <?php } ?>
+                    <?php if (!empty($item->getTitle())) { ?>
+                        <h2 class="featured__items--content__title" style="color:<?=$item->getTitleColour() ?>"><?= strip_tags($item->getTitle(), '<br>') ?></h2>
+                    <?php } ?>
+                    <?php if (!empty($item->getLinkText())) { ?>
+                    <span class="featured__items--content__link" style="color:<?=$item->getLinkColour() ?>"><?= strip_tags($item->getLinkText(), '<br>') ?>
+                        <svg class="featured__items--content__arrow--icon" xmlns="http://www.w3.org/2000/svg" width="20.2" height="12.2" viewBox="0 0 6.2 6.2">
+                            <path d="M7.1,4l-.546.546L8.716,6.713H4v.775H8.716L6.554,9.654,7.1,10.2,9.233,8.067,10.2,7.1Z" transform="translate(-4 -4)" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                    <?php } ?>
+                </div>
+                <?php if (!empty($item->getUrl())) { ?>
+                    </a>
+                <?php } ?>
+            </div>
+            <!--           end left column-->
+        <?php } ?>
+        <?php if ($item->getSortOrder() == 2) { ?>
+<!--        right column-->
+        <div class="right-column">
+<!--            right row 1-->
+            <div class="right-row-1">
+<!--            left image-->
+            <div class="featured__items--img">
+                <?php if (!empty($item->getUrl())) { ?>
+                <a href="<?= $block->escapeUrl($item->getUrl()) ?>" class="featured--items__link">
+                    <?php } ?>
+                    <img src="<?= $block->escapeUrl($item->getMediaPath()) ?>" alt="<?= $block->escapeHtml($item->getImageAlt()) ?>" />
+                    <div class="featured--items__container">
+                        <?php if (!empty($item->getHeading())) { ?>
+                            <span class="featured__items--content__subtitle" style="color:<?=$item->getHeadingColour() ?>"><?= strip_tags($item->getHeading(), '<br>') ?></span>
+                        <?php } ?>
+                        <?php if (!empty($item->getTitle())) { ?>
+                            <h2 class="featured__items--content__title" style="color:<?=$item->getTitleColour() ?>"><?= strip_tags($item->getTitle(), '<br>') ?></h2>
+                        <?php } ?>
+                        <?php if (!empty($item->getLinkText())) { ?>
+                            <span class="featured__items--content__link" style="color:<?=$item->getLinkColour() ?>"><?= strip_tags($item->getLinkText(), '<br>') ?>
+                        <svg class="featured__items--content__arrow--icon" xmlns="http://www.w3.org/2000/svg" width="20.2" height="12.2" viewBox="0 0 6.2 6.2">
+                            <path d="M7.1,4l-.546.546L8.716,6.713H4v.775H8.716L6.554,9.654,7.1,10.2,9.233,8.067,10.2,7.1Z" transform="translate(-4 -4)" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                        <?php } ?>
+                    </div>
+                    <?php if (!empty($item->getUrl())) { ?>
+                </a>
+            <?php } ?>
+                <!--           end left image-->
+            </div>
+        <?php } ?>
+        <?php if ($item->getSortOrder() == 3) { ?>
+        <!--           right image-->
+            <div class="featured__items--img">
+                <?php if (!empty($item->getUrl())) { ?>
+                <a href="<?= $block->escapeUrl($item->getUrl()) ?>" class="featured--items__link">
+                    <?php } ?>
+                    <img src="<?= $block->escapeUrl($item->getMediaPath()) ?>" alt="<?= $block->escapeHtml($item->getImageAlt()) ?>" />
+                    <div class="featured--items__container">
+                        <?php if (!empty($item->getHeading())) { ?>
+                            <span class="featured__items--content__subtitle" style="color:<?=$item->getHeadingColour() ?>"><?= strip_tags($item->getHeading(), '<br>') ?></span>
+                        <?php } ?>
+                        <?php if (!empty($item->getTitle())) { ?>
+                            <h2 class="featured__items--content__title" style="color:<?=$item->getTitleColour() ?>"><?= strip_tags($item->getTitle(), '<br>') ?></h2>
+                        <?php } ?>
+                        <?php if (!empty($item->getLinkText())) { ?>
+                            <span class="featured__items--content__link" style="color:<?=$item->getLinkColour() ?>"><?= strip_tags($item->getLinkText(), '<br>') ?>
+                        <svg class="featured__items--content__arrow--icon" xmlns="http://www.w3.org/2000/svg" width="20.2" height="12.2" viewBox="0 0 6.2 6.2">
+                            <path d="M7.1,4l-.546.546L8.716,6.713H4v.775H8.716L6.554,9.654,7.1,10.2,9.233,8.067,10.2,7.1Z" transform="translate(-4 -4)" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                        <?php } ?>
+                    </div>
+                    <?php if (!empty($item->getUrl())) { ?>
+                </a>
+            <?php } ?>
+                <!--          end right image-->
+            </div>
+        <!--           end right row 1-->
+        </div>
+        <?php } ?>
+        <?php if ($item->getSortOrder() == 4) { ?>
+            <!--            right row 2-->
+            <div class="right-row-2">
+<!--            bottom right image-->
+                <div class="featured__items--img">
+                    <?php if (!empty($item->getUrl())) { ?>
+                    <a href="<?= $block->escapeUrl($item->getUrl()) ?>" class="featured--items__link">
+                        <?php } ?>
+                        <img src="<?= $block->escapeUrl($item->getMediaPath()) ?>" alt="<?= $block->escapeHtml($item->getImageAlt()) ?>" />
+                        <div class="featured--items__container">
+                            <?php if (!empty($item->getHeading())) { ?>
+                                <span class="featured__items--content__subtitle" style="color:<?=$item->getHeadingColour() ?>"><?= strip_tags($item->getHeading(), '<br>') ?></span>
+                            <?php } ?>
+                            <?php if (!empty($item->getTitle())) { ?>
+                                <h2 class="featured__items--content__title" style="color:<?=$item->getTitleColour() ?>"><?= strip_tags($item->getTitle(), '<br>') ?></h2>
+                            <?php } ?>
+                            <?php if (!empty($item->getLinkText())) { ?>
+                                <span class="featured__items--content__link" style="color:<?=$item->getLinkColour() ?>"><?= strip_tags($item->getLinkText(), '<br>') ?>
+                        <svg class="featured__items--content__arrow--icon" xmlns="http://www.w3.org/2000/svg" width="20.2" height="12.2" viewBox="0 0 6.2 6.2">
+                            <path d="M7.1,4l-.546.546L8.716,6.713H4v.775H8.716L6.554,9.654,7.1,10.2,9.233,8.067,10.2,7.1Z" transform="translate(-4 -4)" fill="currentColor"></path>
+                        </svg>
+                    </span>
+                            <?php } ?>
+                        </div>
+                        <?php if (!empty($item->getUrl())) { ?>
+                    </a>
+                <?php } ?>
+                    <!--            end bottom right image-->
+                </div>
+                <!--            end right row 2-->
+            </div>
+            <!--       end right column-->
+            </div>
+        <?php } ?>
+    <?php endforeach; ?>
+</section>

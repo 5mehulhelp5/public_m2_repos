@@ -13,6 +13,7 @@ use Magento\Framework\App\Config\Value;
 class Categories extends Value
 {
     /**
+     * Process data before saving
      * Convert array to comma-separated string
      *
      * @return $this
@@ -31,6 +32,7 @@ class Categories extends Value
     }
 
     /**
+     * Process data after loading
      * Convert comma-separated string to array for multiselect
      *
      * @return $this

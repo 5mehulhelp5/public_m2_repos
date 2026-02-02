@@ -9,13 +9,13 @@ use Magento\Store\Model\StoreManagerInterface;
 
 class Image extends AbstractModel
 {
-    const POSITION_LEFT = 'justify-start';
-    const POSITION_CENTRE = 'justify-center';
-    const POSITION_RIGHT = 'justify-end';
+    const POSITION_LEFT = 0;
+    const POSITION_CENTRE = 1;
+    const POSITION_RIGHT = 2;
 
-    const POSITION_TOP = 'items-start';
-    const POSITION_MIDDLE = 'items-center';
-    const POSITION_BOTTOM = 'items-end';
+    const POSITION_TOP = 0;
+    const POSITION_MIDDLE = 1;
+    const POSITION_BOTTOM = 2;
 
     /**
      * @var StoreManagerInterface
@@ -23,6 +23,8 @@ class Image extends AbstractModel
     private $_storeManager;
 
     /**
+     * Initialize resource model
+     *
      * @return void
      */
     protected function _construct()
@@ -35,8 +37,8 @@ class Image extends AbstractModel
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        ?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+        ?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
@@ -51,9 +53,11 @@ class Image extends AbstractModel
     }
 
     /**
+     * Get available positions as options array
+     *
      * @return array
      */
-    public function getAvailablePositions()
+    public function getAvailableHorizontalPositions()
     {
         return [
             self::POSITION_LEFT => __('Left'),
@@ -63,6 +67,8 @@ class Image extends AbstractModel
     }
 
     /**
+     * Get available positions as options array
+     *
      * @return array
      */
     public function getAvailableVerticalPositions()
@@ -77,18 +83,18 @@ class Image extends AbstractModel
     /**
      * @return mixed
      */
-    public function getPosition()
+    public function getHorizontalPosition()
     {
-        return $this->getData('position');
+        return $this->getData('horizontal_position');
     }
 
     /**
      * @param $position
      * @return mixed
      */
-    public function setPosition($position)
+    public function setHorizontalPosition($position)
     {
-        return $this->setData('position', $position);
+        return $this->setData('horizontal_position', $position);
     }
 
     /**

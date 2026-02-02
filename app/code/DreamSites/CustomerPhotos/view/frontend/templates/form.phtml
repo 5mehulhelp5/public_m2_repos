@@ -12,9 +12,7 @@
           action="<?= $block->escapeUrl($block->getFormAction()) ?>"
           method="post"
           id="customer-photo-form"
-          x-data="formValidation()"
-          @submit="validateForm($event)"
-          @clear-error.window="errors[$event.detail.field] = false">
+          @submit="validateForm($event)">
 
         <fieldset class="fieldset">
             <div class="field customer-name required">
@@ -27,10 +25,10 @@
                            id="customer_name"
                            title="<?= $block->escapeHtmlAttr(__('Customer Name')) ?>"
                            class="input-text"
-                           x-ref="customerName"
+                           ref="customerName"
                            @input="validateCustomerName($event)"
                            value=""/>
-                    <div x-show="errors.customerName" class="mage-error" id="customer_name-error">
+                    <div v-show="errors.customerName" class="mage-error" id="customer_name-error">
                         <?= $block->escapeHtml(__('This is a required field.')) ?>
                     </div>
                 </div>
@@ -41,30 +39,14 @@
                     <span><?= $block->escapeHtml(__('Upload photo')) ?></span>
                 </label>
                 <div class="control">
-                    <div x-data="gallery" x-cloak>
-                        <!-- Hidden input to track if file is uploaded -->
-                        <input type="hidden" id="has_image_file" x-model="hasFile" value="0">
-
-                        <!-- spinner while FilePond loads -->
-                        <div x-show="loadingFilePond">
-                            <svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                        </div>
-                        <input
-                            x-cloak
-                            x-show="!loadingFilePond"
-                            name="photo[]"
-                            id="image_filename"
-                            type="file"
-                            x-ref="upload"
-                            accept="image/png, image/jpeg, image/jpg, image/webp, image/avif, image/heic, image/heif"
-                            class="hover:cursor-pointer"
-                            @change="$dispatch('clear-error', { field: 'imageFile' })"
-                        >
+                    <div id="image-upload-app">
+                        <file-pond-uploader
+                            :post_url="postUrl"
+                            v-on:processfiles="handleFilesProcessed"
+                            >
+                        </file-pond-uploader>
                     </div>
-                    <div x-show="errors.imageFile" class="mage-error" id="image_filename-error">
+                    <div v-show="errors.imageFile" class="mage-error" id="image_filename-error">
                         <?= $block->escapeHtml(__('This is a required field.')) ?>
                     </div>
                 </div>
@@ -89,83 +71,84 @@
                     <span><?= $block->escapeHtml(__('Product')) ?></span>
                 </label>
                 <div class="control">
-                    <div x-data="productSearch('<?= $block->escapeUrl($block->getProductSearchUrl()) ?>')"
-                         @click.away="open = false">
-                        <!-- Hidden field for actual product_id submission -->
-                        <input type="hidden"
-                               name="product_id"
-                               id="product_id"
-                               :value="selectedProduct ? selectedProduct.id : ''"
-                               x-ref="productId"/>
+                    <!-- Hidden field for actual product_id submission -->
+                    <input type="hidden"
+                           name="product_id"
+                           id="product_id"
+                           :value="selectedProduct ? selectedProduct.id : ''"
+                           ref="productId"/>
 
-                        <!-- Selected Product Display -->
-                    <div id="filepond-selected-product" x-show="selectedProduct" class="mb-2 flex items-center gap-2 p-3 border border-gray-300 rounded bg-gray-50">
+                    <!-- Selected Product Display -->
+                    <div id="filepond-selected-product" v-show="selectedProduct" class="product-selection">
                         <!-- Product Image -->
-                        <img x-show="selectedProduct && selectedProduct.image"
+                        <img v-show="selectedProduct && selectedProduct.image"
                              :src="selectedProduct ? selectedProduct.image : ''"
                              :alt="selectedProduct ? selectedProduct.name : ''"
-                             class="w-12 h-12 object-cover rounded"
+                             class="product-selection__image"
                              onerror="this.style.display='none'"/>
 
                         <!-- Product Name -->
-                        <span x-text="selectedProduct ? selectedProduct.name : ''" class="flex-1 text-sm font-medium"></span>
+                        <span v-text="selectedProduct ? selectedProduct.name : ''" class="product-selection__name"></span>
 
                         <!-- Clear Button -->
                         <button type="button"
                                 @click="clearSelection()"
-                                class="text-red-600 hover:text-red-800 font-medium text-sm px-2 py-1 rounded hover:bg-red-50">
+                                class="product-selection__clear">
                             Clear
                         </button>
                     </div>
 
-                    <div x-show="!selectedProduct" class="relative">
+                    <!-- Search Input -->
+                    <div v-show="!selectedProduct" class="product-search">
                         <input type="text"
-                               x-model="searchQuery"
-                               @input.debounce.500ms="searchProducts()"
-                               @focus="open = true"
+                               v-model="searchQuery"
+                               @input="debounceSearch"
+                               @focus="searchOpen = true"
                                id="product_search"
                                placeholder="<?= $block->escapeHtmlAttr(__('Search for a product...')) ?>"
-                               class="input-text w-full"
+                               class="input-text"
                                autocomplete="off"/>
 
-                        <div x-show="loading" class="absolute right-3 top-1/2 transform -translate-y-1/2">
-                            <svg class="animate-spin h-5 w-5 text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        <!-- Loading Spinner -->
+                        <div v-show="searchLoading" class="product-search__loading">
+                            <svg class="product-search__spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="product-search__spinner-circle" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="product-search__spinner-path" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
                         </div>
 
-                        <div x-show="open && products.length > 0"
-                             class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg max-h-80 overflow-auto">
-                            <template x-for="product in products" :key="product.id">
-                                <div @click="selectProduct(product)"
-                                     class="flex items-center gap-3 p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-b-0">
-                                    <!-- Product Image -->
-                                    <img x-show="product.image"
-                                         :src="product.image"
-                                         :alt="product.name"
-                                         class="w-10 h-10 object-cover rounded"
-                                         onerror="this.style.display='none'"/>
-                                    <div x-cloak x-show="!product.image" id="img-placeholder" class="w-10 h-10 bg-gray-200 rounded flex items-center justify-center">
-                                        <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                        </svg>
-                                    </div>
-                                    <!-- Product Name -->
-                                    <span x-text="product.name" class="flex-1 text-sm"></span>
+                        <!-- Dropdown Results -->
+                        <div v-show="searchOpen && products.length > 0" class="product-search__dropdown">
+                            <div v-for="product in products" :key="product.id"
+                                 @click="selectProduct(product)"
+                                 class="product-search__item">
+                                <!-- Product Image -->
+                                <img v-show="product.image"
+                                     :src="product.image"
+                                     :alt="product.name"
+                                     class="product-search__item-image"
+                                     onerror="this.style.display='none'"/>
+                                <div v-cloak v-show="!product.image" class="product-search__item-placeholder">
+                                    <svg class="product-search__item-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
                                 </div>
-                            </template>
+                                <!-- Product Name -->
+                                <span v-text="product.name" class="product-search__item-name"></span>
+                            </div>
                         </div>
 
-                        <div x-show="open && !loading && searchQuery.length >= 3 && products.length === 0"
-                             class="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded shadow-lg p-3 text-sm text-gray-500">
+                        <!-- No Results Message -->
+                        <div v-show="searchOpen && !searchLoading && searchQuery.length >= 3 && products.length === 0"
+                             class="product-search__no-results">
                             <?= $block->escapeHtml(__('No products found')) ?>
                         </div>
                     </div>
-                </div>
 
-                <div x-show="errors.productId" class="mage-error" id="product_id-error">
-                    <?= $block->escapeHtml(__('This is a required field.')) ?>
+                    <!-- Validation Error Message -->
+                    <div v-show="errors.productId" class="mage-error" id="product_id-error">
+                        <?= $block->escapeHtml(__('This is a required field.')) ?>
+                    </div>
                 </div>
             </div>
         </fieldset>
@@ -173,343 +156,180 @@
         <div class="actions-toolbar">
             <div class="primary">
                 <button type="submit"
-                        x-bind:disabled="errors.imageFile || errors.customerName || errors.productId"
+                        :disabled="errors.imageFile || errors.customerName || errors.productId"
                         title="<?= $block->escapeHtmlAttr(__('Upload Photo')) ?>"
-                        class="action submit primary disabled:cursor-not-allowed disabled:hover:!cursor-not-allowed disabled:opacity-50">
+                        class="action submit primary">
                     <span><?= $block->escapeHtml(__('Upload Photo')) ?></span>
                 </button>
             </div>
         </div>
     </form>
 </div>
+<script type="text/javascript">
+    require([
+        'jquery',
+        'vue',
+        'DreamSites_CustomerPhotos/js/FilePondUploaderWrapper',
+        'domReady!'
+    ], function($, Vue, FilePondUploaderComponent) {
 
-<script>
-require([
-    'filepond',
-    'filepond-plugin-image-preview',
-    'filepond-plugin-image-resize',
-    'filepond-plugin-image-transform',
-    'filepond-plugin-image-crop',
-    'filepond-plugin-file-validate-type',
-    'filepond-plugin-file-validate-size',
-    'heic2any',
-    'domReady!'
-], function (
-    FilePond,
-    FilePondPluginImagePreview,
-    FilePondPluginImageResize,
-    FilePondPluginImageTransform,
-    FilePondPluginImageCrop,
-    FilePondPluginFileValidateType,
-    FilePondPluginFileValidateSize,
-    heic2any
-) {
-    window.FilePond = FilePond;
+        const { createApp } = Vue;
 
-    // heic-to IIFE build exports as window.HeicTo
-    if (window.HeicTo) {
-        window.heic2any = window.HeicTo;
-    } else {
-        console.error('HeicTo not found on window object');
-    }
-
-    FilePond.registerPlugin(
-        FilePondPluginImagePreview,
-        FilePondPluginImageResize,
-        FilePondPluginImageTransform,
-        FilePondPluginImageCrop,
-        FilePondPluginFileValidateType,
-        FilePondPluginFileValidateSize
-    );
-
-    window.FilePondPluginFileValidateType = FilePondPluginFileValidateType;
-    window.FilePondPluginFileValidateSize = FilePondPluginFileValidateSize;
-    window.FilePondPluginImagePreview = FilePondPluginImagePreview;
-    window.FilePondPluginImageCrop = FilePondPluginImageCrop;
-    window.FilePondPluginImageResize = FilePondPluginImageResize;
-    window.FilePondPluginImageTransform = FilePondPluginImageTransform;
-
-    document.dispatchEvent(new CustomEvent('filepond:ready'));
-});
-
-document.addEventListener("alpine:init", () => {
-    Alpine.data('formValidation', () => ({
-        errors: {
-            customerName: false,
-            imageFile: false,
-            productId: false
-        },
-
-        validateCustomerName(event) {
-            const value = event.target.value.trim();
-            if (value.length === 0) {
-                this.errors.customerName = true;
-            } else if (value.length >= 3) {
-                this.errors.customerName = false;
-            }
-        },
-
-        validateForm(event) {
-            // Reset all errors
-            this.errors.customerName = false;
-            this.errors.imageFile = false;
-            this.errors.productId = false;
-
-            let hasErrors = false;
-            let firstErrorElement = null;
-
-            const customerName = this.$refs.customerName;
-            if (!customerName || !customerName.value.trim()) {
-                this.errors.customerName = true;
-                hasErrors = true;
-                if (!firstErrorElement) firstErrorElement = customerName;
-            }
-
-            const hasImageFile = document.getElementById('has_image_file');
-            const imageFileInput = document.getElementById('image_filename');
-            if (!hasImageFile || hasImageFile.value !== 'true') {
-                this.errors.imageFile = true;
-                hasErrors = true;
-                if (!firstErrorElement) firstErrorElement = imageFileInput;
-            }
-
-            const productId = document.getElementById('product_id');
-            if (!productId || !productId.value) {
-                this.errors.productId = true;
-                hasErrors = true;
-                if (!firstErrorElement) firstErrorElement = productId;
-            }
-
-            if (hasErrors) {
-                event.preventDefault();
-                if (firstErrorElement) {
-                    firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-                return false;
-            }
-
-            return true;
-        }
-    }));
-
-    Alpine.data('productSearch', (searchUrl) => ({
-        searchQuery: '',
-        products: [],
-        selectedProduct: null,
-        open: false,
-        loading: false,
-
-        searchProducts() {
-            if (this.searchQuery.length < 3) {
-                this.products = [];
-                this.open = false;
-                return;
-            }
-            this.loading = true;
-            this.open = true;
-            fetch(searchUrl + '?q=' + encodeURIComponent(this.searchQuery), {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-                .then(r => r.json())
-                .then(data => {
-                    this.loading = false;
-                    this.products = data.success ? data.products : [];
-                })
-                .catch(err => {
-                    console.error('Error searching products:', err);
-                    this.loading = false;
-                    this.products = [];
-                });
-        },
-
-        selectProduct(product) {
-            this.selectedProduct = product;
-            this.searchQuery = '';
-            this.products = [];
-            this.open = false;
-            window.dispatchEvent(new CustomEvent('clear-error', {
-                detail: { field: 'productId' }
-            }));
-        },
-
-        clearSelection() {
-            this.selectedProduct = null;
-            this.searchQuery = '';
-            this.products = [];
-            this.open = false;
-            this.errors.productId = true;
-        }
-    }));
-
-    Alpine.data("gallery", () => ({
-        postUrl: "<?= $block->escapeUrl($block->getUploadUrl()) ?>",
-        loadingFilePond: true,
-        hasUploaded: false,
-        hasFile: false,
-        pond: null,
-
-        init() {
-            const self = this;
-
-            const start = () => {
-                try {
-                    const validateType = (source, type) => {
-                        return new Promise((resolve) => {
-                            if (source && source.name && /\.heic$/i.test(source.name)) {
-                                resolve('image/heic');
-                            } else if (source && source.name && /\.heif$/i.test(source.name)) {
-                                resolve('image/heif');
-                            } else {
-                                resolve(type);
-                            }
-                        });
-                    };
-
-                    const inputElement = self.$refs.upload;
-                    const pond = window.FilePond.create(inputElement, {
-                    acceptedFileTypes: ["image/jpg", "image/jpeg", "image/png", "image/webp", "image/avif", "image/heic", "image/heif"],
-                    allowMultiple: false,
-                    instantUpload: true,
-                    credits: false,
-                    dropOnPage: true,
-                    allowImageTransform: true,
-                    allowImageResize: true,
-                    allowFileEncode: true,
-                    allowImagePreview: true,
-                    allowProcess: true,
-                    allowImageCrop: true,
-                    imageCropAspectRation: "1:1",
-                    imageTransformOutputMimeType: "image/jpeg",
-                    imageTransformOutputQuality: 80,
-                    imagePreviewMaxHeight: 120,
-                    labelIdle: "Drag or click here to upload image",
-                    maxFileSize: "100MB",
-                    maxFiles: 1,
-                    imageResizeTargetWidth: 1024,
-                    imageResizeTargetHeight: 1365,
-                    fileValidateTypeDetectType: validateType,
-
-                    oninit: () => {
-                        self.loadingFilePond = false;
+        const app = createApp({
+            data() {
+                return {
+                    postUrl: <?= json_encode($block->getUploadUrl()) ?>,
+                    productSearchUrl: <?= json_encode($block->getProductSearchUrl()) ?>,
+                    errors: {
+                        customerName: false,
+                        imageFile: true, // Initially true until file is uploaded
+                        productId: false
                     },
-
-                    server: {
-                        process: (fieldName, file, metadata, load, error, progress, abort, transfer, options) => {
-                            const processFile = async (fileToProcess) => {
-                                try {
-                                    const formData = new FormData();
-                                    formData.append("filename", fileToProcess, fileToProcess.name);
-                                    formData.append("form_key", window.FORM_KEY);
-
-                                    // Use fetch API for upload
-                                    const xhr = new XMLHttpRequest();
-
-                                    xhr.upload.addEventListener('progress', (e) => {
-                                        if (e.lengthComputable) {
-                                            progress(e.lengthComputable, e.loaded, e.total);
-                                        }
-                                    });
-
-                                    xhr.addEventListener('load', () => {
-                                        if (xhr.status >= 200 && xhr.status < 300) {
-                                            try {
-                                                const response = JSON.parse(xhr.responseText);
-                                                load(response);
-                                            } catch (e) {
-                                                error('Invalid response from server');
-                                            }
-                                        } else {
-                                            error('Upload failed: ' + xhr.statusText);
-                                        }
-                                    });
-
-                                    xhr.addEventListener('error', () => {
-                                        error('Upload failed: Network error');
-                                    });
-
-                                    xhr.open('POST', self.postUrl, true);
-                                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                                    xhr.send(formData);
-                                    self.hasUploaded = true;
-
-                                } catch (err) {
-                                    error('Upload failed: ' + err.message);
-                                    self.hasUploaded = false;
-                                    console.error('Upload failed', err);
-                                }
-                            };
-
-                            if (file.name.toLowerCase().indexOf('.heic') !== -1 || file.name.toLowerCase().indexOf('.heif') !== -1) {
-                                const converter = window.heic2any || window.HeicTo;
-
-                                if (converter) {
-                                    // console.log('Converting HEIC/HEIF to JPEG...');
-                                    converter({
-                                        blob: file,
-                                        type: "image/jpeg",
-                                        quality: 0.3
-                                    }).then((convertedBlob) => {
-                                        // console.log('Conversion successful, blob size:', convertedBlob.size);
-                                        const newFileName = file.name.replace(/\.(heic|heif)$/i, ".jpg");
-                                        const convertedFile = new File([convertedBlob], newFileName, { type: "image/jpeg" });
-                                        processFile(convertedFile);
-                                    }).catch((err) => {
-                                        console.error("HEIC/HEIF conversion failed:", err);
-                                        error("HEIC/HEIF conversion failed: " + err);
-                                    });
-                                } else {
-                                    error("HEIC converter not loaded");
-                                    console.error("heic-to library not available");
-                                }
-                            } else {
-                                processFile(file);
-                            }
-
-                            return {
-                                abort: () => {
-                                }
-                            };
-                        },
-                    },
-                });
-                self.pond = pond;
-                    pond.on('addfile', () => {
-                        this.errors.imageFile = false;
-                        self.hasFile = true;
-                        pond.processFiles();
-                    });
-                    pond.on('removefile', () => {
-                        this.errors.imageFile = true;
-                        self.hasFile = false;
-                    });
-
-                    } catch (err) {
-                        console.error('FilePond initialization error:', err);
-                        self.loadingFilePond = false;
-                    }
-                };
-
-                if (window.FilePond) {
-                    start();
-                } else {
-                    const timeoutId = setTimeout(() => {
-                        console.error('FilePond failed to load within timeout');
-                        self.loadingFilePond = false;
-                    }, 6000);
-
-                    const checkFilePond = setInterval(() => {
-                        if (window.FilePond) {
-                            clearInterval(checkFilePond);
-                            clearTimeout(timeoutId);
-                            start();
-                        }
-                    }, 100);
+                    searchQuery: '',
+                    products: [],
+                    selectedProduct: null,
+                    searchOpen: false,
+                    searchLoading: false,
+                    searchDebounceTimer: null,
+                    hasImageFile: false
                 }
             },
-        }));
+            methods: {
+                validateCustomerName(event) {
+                    const value = event.target.value.trim();
+                    if (value.length === 0) {
+                        this.errors.customerName = true;
+                    } else if (value.length >= 1) {
+                        this.errors.customerName = false;
+                    }
+                },
+
+                handleFilesProcessed() {
+                    // Called when FilePond finishes processing files
+                    this.hasImageFile = true;
+                    this.errors.imageFile = false;
+                },
+
+                debounceSearch() {
+                    // Clear existing timer
+                    if (this.searchDebounceTimer) {
+                        clearTimeout(this.searchDebounceTimer);
+                    }
+
+                    // Set new timer
+                    this.searchDebounceTimer = setTimeout(() => {
+                        this.searchProducts();
+                    }, 500);
+                },
+
+                searchProducts() {
+                    if (this.searchQuery.length < 3) {
+                        this.products = [];
+                        this.searchOpen = false;
+                        return;
+                    }
+
+                    this.searchLoading = true;
+                    this.searchOpen = true;
+
+                    fetch(this.productSearchUrl + '?q=' + encodeURIComponent(this.searchQuery), {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        }
+                    })
+                    .then(r => r.json())
+                    .then(data => {
+                        this.searchLoading = false;
+                        this.products = data.success ? data.products : [];
+                    })
+                    .catch(err => {
+                        console.error('Error searching products:', err);
+                        this.searchLoading = false;
+                        this.products = [];
+                    });
+                },
+
+                selectProduct(product) {
+                    this.selectedProduct = product;
+                    this.searchQuery = '';
+                    this.products = [];
+                    this.searchOpen = false;
+                    this.errors.productId = false;
+                },
+
+                clearSelection() {
+                    this.selectedProduct = null;
+                    this.searchQuery = '';
+                    this.products = [];
+                    this.searchOpen = false;
+                    this.errors.productId = true;
+                },
+
+                validateForm(event) {
+                    // Reset all errors
+                    this.errors.customerName = false;
+                    this.errors.imageFile = false;
+                    this.errors.productId = false;
+
+                    let hasErrors = false;
+                    let firstErrorElement = null;
+
+                    // Validate customer name
+                    const customerName = this.$refs.customerName;
+                    if (!customerName || !customerName.value.trim()) {
+                        this.errors.customerName = true;
+                        hasErrors = true;
+                        if (!firstErrorElement) firstErrorElement = customerName;
+                    }
+
+                    // Validate image file
+                    if (!this.hasImageFile) {
+                        this.errors.imageFile = true;
+                        hasErrors = true;
+                        const imageFileInput = document.getElementById('image_filename');
+                        if (!firstErrorElement) firstErrorElement = imageFileInput;
+                    }
+
+                    // Validate product selection
+                    const productId = this.$refs.productId;
+                    if (!productId || !productId.value) {
+                        this.errors.productId = true;
+                        hasErrors = true;
+                        if (!firstErrorElement) firstErrorElement = productId;
+                    }
+
+                    // If there are errors, prevent submission and scroll to first error
+                    if (hasErrors) {
+                        event.preventDefault();
+                        if (firstErrorElement) {
+                            firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        }
+                        return false;
+                    }
+
+                    // Form is valid, allow submission
+                    return true;
+                }
+            },
+            mounted() {
+                // Close dropdown when clicking outside
+                document.addEventListener('click', (event) => {
+                    const searchContainer = this.$el.querySelector('.product-search');
+                    if (searchContainer && !searchContainer.contains(event.target)) {
+                        this.searchOpen = false;
+                    }
+                });
+            },
+            components: {
+                'file-pond-uploader': FilePondUploaderComponent
+            },
+        });
+
+        app.mount('.customer-photo-form');
     });
 </script>
+<link rel="stylesheet" href="<?= $block->getViewFileUrl('DreamSites_CustomerPhotos::css/filepond/filepond.min.css') ?>">
+<link rel="stylesheet" href="<?= $block->getViewFileUrl('DreamSites_CustomerPhotos::css/filepond/filepond-plugin-image-preview.min.css') ?>">
+<link rel="stylesheet" href="<?= $block->getViewFileUrl('DreamSites_CustomerPhotos::css/upload.css') ?>">

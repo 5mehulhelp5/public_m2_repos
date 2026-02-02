@@ -4,10 +4,8 @@ namespace DreamSites\HomeCarousel\Setup;
 
 use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\InstallSchemaInterface;
-
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
 
 class InstallSchema implements InstallSchemaInterface
 {
@@ -81,13 +79,13 @@ class InstallSchema implements InstallSchemaInterface
             'created_at',
             Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false],
             'Creation Time'
         )->addColumn(
             'updated_at',
             Table::TYPE_TIMESTAMP,
             null,
-            [],
+            ['nullable' => false],
             'Modification Time'
         )->setComment(
             'Home Page Carousel Image Upload Table'

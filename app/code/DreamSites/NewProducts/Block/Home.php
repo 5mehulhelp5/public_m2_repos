@@ -79,6 +79,8 @@ class Home extends Template
     }
 
     /**
+     * Get configured category IDs
+     *
      * @return array|null
      */
     public function getNewProductsCategories()
@@ -101,6 +103,8 @@ class Home extends Template
     }
 
     /**
+     * Get category products organized by category
+     *
      * @return array
      */
     public function getCategoryProducts()
@@ -112,6 +116,8 @@ class Home extends Template
     }
 
     /**
+     * Get categories
+     *
      * @return array
      */
     public function getCategories()
@@ -123,6 +129,8 @@ class Home extends Template
     }
 
     /**
+     * Get first category key
+     *
      * @return string
      */
     public function getFirstCategoryKey()
@@ -135,6 +143,8 @@ class Home extends Template
     }
 
     /**
+     * Load category products
+     *
      * @return void
      */
     protected function loadCategoryProducts()
@@ -154,8 +164,12 @@ class Home extends Template
                     ->addCategoryFilter($category)
                     ->addAttributeToFilter('status', \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
                     ->addAttributeToFilter('visibility', 4)
-                    ->setPageSize(10)
-                    ->load();
+                    ->setPageSize(10);
+
+                // Add media gallery data to each product
+                $productCollection->addMediaGalleryData();
+
+                $productCollection->load();
 
                 $key = strtolower($category->getUrlKey());
                 $this->categoryProducts[$key] = $productCollection;
@@ -164,6 +178,8 @@ class Home extends Template
     }
 
     /**
+     * Get product data for display
+     *
      * @param \Magento\Catalog\Model\Product $product
      * @return array
      */
@@ -175,8 +191,10 @@ class Home extends Template
         $productPrice = $this->priceHelper->currency($finalPrice, true, false);
         $productUrl = $product->getProductUrl();
         $shortDescription = $product->getShortDescription();
+        $longDescription = $product->getDescription();
         $productOptions = $this->newProductsHelper->getProductOptions($product);
         $reviewData = $this->newProductsHelper->getProductReviewData($product);
+        $galleryImages = $this->getProductGalleryImages($product);
 
         return [
             'id' => $product->getId(),
@@ -184,7 +202,9 @@ class Home extends Template
             'price' => $productPrice,
             'price_raw' => $finalPrice,
             'image' => $productImageUrl,
-            'description' => $shortDescription,
+            'gallery_images' => $galleryImages,
+            'short_description' => $shortDescription,
+            'description' => $longDescription,
             'url' => $productUrl,
             'sku' => $product->getSku(),
             'typeId' => $product->getTypeId(),
@@ -195,6 +215,54 @@ class Home extends Template
     }
 
     /**
+     * Get product gallery images (max 5)
+     *
+     * @param \Magento\Catalog\Model\Product $product
+     * @return array
+     */
+    protected function getProductGalleryImages($product)
+    {
+        $images = [];
+
+        // Get media gallery data from product
+        $mediaGallery = $product->getData('media_gallery');
+
+        if ($mediaGallery && isset($mediaGallery['images']) && is_array($mediaGallery['images'])) {
+            $count = 0;
+            $storeMediaUrl = $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA);
+
+            foreach ($mediaGallery['images'] as $image) {
+                if ($count >= 5) {
+                    break;
+                }
+
+                // Skip disabled images
+                if (isset($image['disabled']) && $image['disabled']) {
+                    continue;
+                }
+
+                $images[] = [
+                    'url' => $storeMediaUrl . 'catalog/product' . $image['file'],
+                    'label' => isset($image['label']) ? $image['label'] : $product->getName()
+                ];
+                $count++;
+            }
+        }
+
+        // If no gallery images, at least return the main image
+        if (empty($images)) {
+            $images[] = [
+                'url' => $this->imageHelper->init($product, 'product_base_image')->getUrl(),
+                'label' => $product->getName()
+            ];
+        }
+
+        return $images;
+    }
+
+    /**
+     * Get helper
+     *
      * @return NewProductsHelper
      */
     public function getHelper()
@@ -203,6 +271,8 @@ class Home extends Template
     }
 
     /**
+     * Get image helper
+     *
      * @return ImageHelper
      */
     public function getImageHelper()
@@ -211,6 +281,8 @@ class Home extends Template
     }
 
     /**
+     * Get price helper
+     *
      * @return PriceHelper
      */
     public function getPriceHelper()

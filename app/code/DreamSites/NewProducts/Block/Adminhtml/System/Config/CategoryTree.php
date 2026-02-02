@@ -38,6 +38,8 @@ class CategoryTree extends Field
     }
 
     /**
+     * Render element HTML
+     *
      * @param AbstractElement $element
      * @return string
      */
@@ -48,6 +50,8 @@ class CategoryTree extends Field
     }
 
     /**
+     * Get current element
+     *
      * @return AbstractElement
      */
     public function getElement()
@@ -56,6 +60,8 @@ class CategoryTree extends Field
     }
 
     /**
+     * Get element name
+     *
      * @return string
      */
     public function getElementName()
@@ -64,6 +70,8 @@ class CategoryTree extends Field
     }
 
     /**
+     * Get element ID
+     *
      * @return string
      */
     public function getElementId()
@@ -72,6 +80,8 @@ class CategoryTree extends Field
     }
 
     /**
+     * Get selected category IDs
+     *
      * @return array
      */
     public function getSelectedCategories()
@@ -90,6 +100,8 @@ class CategoryTree extends Field
     }
 
     /**
+     * Get category chooser URL
+     *
      * @return string
      */
     public function getCategoryChooserUrl()
@@ -98,6 +110,8 @@ class CategoryTree extends Field
     }
 
     /**
+     * Get selected categories as JSON
+     *
      * @return string
      */
     public function getSelectedCategoriesJson()

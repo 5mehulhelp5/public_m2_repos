@@ -100,7 +100,7 @@ class Data extends AbstractHelper
     }
 
     /**
-     * Get product options
+     * Get product options with swatch data
      *
      * @param \Magento\Catalog\Model\Product $product
      * @return array

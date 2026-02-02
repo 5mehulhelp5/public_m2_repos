@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <!-- Featured CSS with Slick imported - Only loaded on home page -->
+        <css src="DreamSites_HomeFeatured::css/featured.css"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block after="asian.homepage.carousel" class="DreamSites\HomeFeatured\Block\ImageList" name="asian.homepage.featured" template="DreamSites_HomeFeatured::featured.phtml" />
+        </referenceContainer>
+    </body>
+</page>

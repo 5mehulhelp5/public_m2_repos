@@ -11,6 +11,8 @@ use Magento\Framework\Registry;
 class Edit extends Container
 {
     /**
+     * Core registry
+     *
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
@@ -30,6 +32,8 @@ class Edit extends Container
     }
 
     /**
+     * Initialize edit block
+     *
      * @return void
      */
     protected function _construct()
@@ -45,6 +49,8 @@ class Edit extends Container
     }
 
     /**
+     * Get header text
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()

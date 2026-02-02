@@ -14,6 +14,8 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 class CategoryNames extends Action
 {
     /**
+     * Authorization level
+     */
     const ADMIN_RESOURCE = 'DreamSites_NewProducts::configuration';
 
     /**
@@ -42,6 +44,8 @@ class CategoryNames extends Action
     }
 
     /**
+     * Get category names
+     *
      * @return \Magento\Framework\Controller\Result\Json
      */
     public function execute()

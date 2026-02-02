@@ -1,0 +1,295 @@
+//Import Slick CSS files as inline (prevents LESS compilation)
+@import (inline) 'slick.css';
+@import (inline) 'slick-theme.css';
+
+/* Utility class to disable transitions for instant hiding */
+.no-transition {
+    transition: none !important;
+}
+
+.slick_position_top {
+    .hero__slider--items__container {
+        margin-top: 2rem;
+    }
+    align-items: flex-start;
+}
+.slick_position_center {
+    align-items: center;
+}
+.slick_position_bottom {
+    .hero__slider--items__container {
+        bottom: 2rem;
+    }
+    align-items: flex-end;
+}
+
+.slick_position_left {
+    .hero__slider--items__container {
+        margin-left: 4rem;
+    }
+    justify-content: flex-start;
+}
+.slick_position_middle {
+    justify-content: center;
+}
+.slick_position_right {
+    justify-content: flex-end;
+}
+
+/* Hero slider full width */
+.hero__slider--activation,
+.hero__slider--items {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Hero slider items container */
+.hero__slider--items {
+    position: relative;
+    aspect-ratio: 24 / 9;
+    background-color: #e5e7eb; /* gray-200 */
+    display: flex;
+    overflow: hidden;
+}
+
+/* Background image container */
+.hero__slider--items__bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+/* Background image */
+.hero__slider--items__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+    display: block;
+}
+
+/* Content container */
+.hero__slider--items__container {
+    position: relative;
+    z-index: 10;
+}
+
+/* Slider content wrapper */
+.slider__content {
+    text-align: center;
+    max-width: 42rem; /* max-w-2xl */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 1024px) {
+    .slider__content {
+        text-align: left;
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* Main title */
+.slider__content--maintitle {
+    font-size: 3rem; /* text-3xl */
+    font-weight: 500; /* font-bold */
+    margin-bottom: 1rem; /* mb-4 */
+    line-height: 1.25; /* leading-tight */
+    transform: translateY(0.75rem); /* translate-y-3 */
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    opacity: 0;
+}
+
+.slider__content--maintitle.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (min-width: 768px) {
+    .slider__content--maintitle {
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .slider__content--maintitle {
+        font-size: 3rem;
+    }
+}
+
+@media (min-width: 1280px) {
+    .slider__content--maintitle {
+        font-size: 3rem;
+    }
+}
+
+@media (max-width: 1024px) {
+    .slider__content--maintitle {
+        font-size: 2rem;
+    }
+
+    .primary__btn {
+        font-size: 1rem;
+    }
+
+    .slick_position_top {
+        .hero__slider--items__container {
+            margin-top: 0;
+        }
+        align-items: center;
+    }
+
+    .slick_position_center {
+        align-items: center;
+    }
+
+    .slick_position_bottom {
+        align-items: center;
+        .hero__slider--items__container {
+            bottom: 0;
+        }
+    }
+
+    .slick_position_left {
+        justify-content: center;
+        .hero__slider--items__container {
+            margin-left: 0;
+        }
+    }
+
+    .slick_position_middle {
+        justify-content: center;
+    }
+
+    .slick_position_right {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .slider__content--maintitle {
+        font-size: 2.25rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .slider__content--maintitle {
+        font-size: 1.6rem;
+    }
+}
+
+/* Description text */
+.slider__content--desc {
+    font-size: 1rem; /* text-base */
+    margin-bottom: 2rem; /* mb-8 */
+    max-width: 32rem; /* max-w-lg */
+    margin-left: auto;
+    margin-right: auto;
+    transform: translateY(0.75rem); /* translate-y-3 */
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    opacity: 0;
+}
+
+.slider__content--desc.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@media (min-width: 768px) {
+    .slider__content--desc {
+        font-size: 1.125rem; /* text-lg */
+    }
+}
+
+@media (min-width: 1024px) {
+    .slider__content--desc {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .slider__content--maintitle {
+        font-size: 1.2rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .slider__content--desc {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .primary__btn {
+        font-size: 0.8rem;
+    }
+}
+
+/* Button container */
+.slider__content--btn {
+    transform: translateY(1rem);
+    transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    opacity: 0;
+}
+
+.slider__content--btn.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Primary button */
+.primary__btn {
+    padding: 0.75rem 2rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.2rem;
+    transition: all 0.3s ease 0s;
+}
+
+.primary__btn:hover {
+    background-color: #061738 !important;
+    text-decoration: none !important;
+}
+
+/* Button icon */
+.primary__btn__icon {
+    font-size: 0.875rem; /* text-sm */
+}
+
+.slick-prev, .slick-next {
+    padding-bottom: 4px;
+    background: transparent !important;
+
+}
+
+.slick-prev {
+    left: 1.5rem;
+    padding-left: 4px;
+}
+
+.slick-next {
+    right: 1.5rem;
+    padding-right: 4px;
+}
+
+.carousel__btn:hover {
+    background-color: #061738;
+}
+
+@media (max-width: 1024px) {
+    .primary__btn.carousel__btn {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .primary__btn.carousel__btn {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}

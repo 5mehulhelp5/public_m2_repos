@@ -34,7 +34,7 @@ class UploadImage extends Action
     public function execute()
     {
         $resultJson = $this->resultFactory->create(\Magento\Framework\Controller\ResultFactory::TYPE_JSON);
-        $this->_logger->error('Image upload: ' . $_FILES['filename']['name']);
+        $this->_logger->info('Image upload: ' . $_FILES['filename']['name']);
 
         if (($_FILES['filename']['name'] !== '') && isset($_FILES['filename']['name'])) {
             try {

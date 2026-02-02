@@ -35,6 +35,8 @@ class MassDelete extends Action
     }
 
     /**
+     * Execute action
+     *
      * @return \Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()

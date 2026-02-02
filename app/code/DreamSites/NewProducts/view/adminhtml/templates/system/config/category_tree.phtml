@@ -40,6 +40,7 @@ require([
     // Initialize pills for already selected categories
     function initializePills() {
         if (selectedCategories.length > 0) {
+            // Load category names via AJAX
             $.ajax({
                 url: '<?= $block->escapeUrl($block->getUrl('newproducts/system_config/categorynames')) ?>',
                 data: {category_ids: selectedCategories.join(',')},
@@ -133,6 +134,7 @@ require([
 
         var slideModal = modal(modalOptions, modalContent);
 
+        // Load category tree via AJAX
         $.ajax({
             url: chooserUrl,
             type: 'GET',
@@ -144,6 +146,7 @@ require([
         });
     });
 
+    // Initialize on page load
     initializePills();
 });
 </script>

@@ -26,13 +26,13 @@ class Collection extends PageCollection implements SearchResultInterface
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param mixed|null $mainTable
-     * @param AbstractDb $eventPrefix
+     * @param mixed $eventPrefix
      * @param mixed $eventObject
      * @param mixed $resourceModel
-     * @param string $model
-     * @param null $connection
+     * @param mixed $connection
      * @param AbstractDb|null $resource
      *
+     * @param string $model
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -44,9 +44,9 @@ class Collection extends PageCollection implements SearchResultInterface
                                $eventPrefix,
                                $eventObject,
                                $resourceModel,
-                               $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
                                $connection = null,
-        AbstractDb             $resource = null
+        ?AbstractDb            $resource = null,
+        string $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
     )
     {
         parent::__construct(
@@ -81,16 +81,8 @@ class Collection extends PageCollection implements SearchResultInterface
     }
 
     /**
-     * @param int $limit
-     * @param int $offset
-     * @return array
-     */
-    public function getAllIds($limit = null, $offset = null)
-    {
-        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
-    }
-
-    /**
+     * Get search criteria.
+     *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
      */
     public function getSearchCriteria()
@@ -99,16 +91,20 @@ class Collection extends PageCollection implements SearchResultInterface
     }
 
     /**
+     * Set search criteria.
+     *
      * @param \Magento\Framework\Api\SearchCriteriaInterface $searchCriteria
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         return $this;
     }
 
     /**
+     * Get total count.
+     *
      * @return int
      */
     public function getTotalCount()
@@ -117,6 +113,8 @@ class Collection extends PageCollection implements SearchResultInterface
     }
 
     /**
+     * Set total count.
+     *
      * @param int $totalCount
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -127,11 +125,13 @@ class Collection extends PageCollection implements SearchResultInterface
     }
 
     /**
+     * Set items list.
+     *
      * @param \Magento\Framework\Api\ExtensibleDataInterface[] $items
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

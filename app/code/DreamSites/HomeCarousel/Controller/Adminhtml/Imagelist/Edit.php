@@ -29,6 +29,8 @@ class Edit extends Action
     protected $_session;
 
     /**
+     * Initialize Group Controller
+     *
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
@@ -58,6 +60,8 @@ class Edit extends Action
     }
 
     /**
+     * Edit PageList item. Forward to new action.
+     *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */

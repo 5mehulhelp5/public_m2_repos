@@ -17,6 +17,8 @@ class Delete extends Action
     }
 
     /**
+     * Delete action
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function execute()

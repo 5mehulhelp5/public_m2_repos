@@ -38,6 +38,8 @@ class Form extends Generic
     }
 
     /**
+     * Prepare form for render
+     *
      * @return void
      */
     protected function _prepareLayout()

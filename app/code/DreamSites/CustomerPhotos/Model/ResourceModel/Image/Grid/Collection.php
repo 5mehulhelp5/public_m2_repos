@@ -29,10 +29,10 @@ class Collection extends ImageCollection implements SearchResultInterface
      * @param AbstractDb $eventPrefix
      * @param mixed $eventObject
      * @param mixed $resourceModel
-     * @param string $model
-     * @param null $connection
+     * @param mixed|null $connection
      * @param AbstractDb|null $resource
      *
+     * @param string $model
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -44,9 +44,9 @@ class Collection extends ImageCollection implements SearchResultInterface
                                $eventPrefix,
                                $eventObject,
                                $resourceModel,
-                               $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
                                $connection = null,
-        AbstractDb             $resource = null
+        ?AbstractDb            $resource = null,
+        string                 $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
     )
     {
         parent::__construct(
@@ -81,19 +81,6 @@ class Collection extends ImageCollection implements SearchResultInterface
     }
 
     /**
-     * Retrieve all ids for collection
-     * Backward compatibility with EAV collection
-     *
-     * @param int $limit
-     * @param int $offset
-     * @return array
-     */
-    public function getAllIds($limit = null, $offset = null)
-    {
-        return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
-    }
-
-    /**
      * Get search criteria.
      *
      * @return \Magento\Framework\Api\SearchCriteriaInterface|null
@@ -110,7 +97,7 @@ class Collection extends ImageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
+    public function setSearchCriteria(?\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria)
     {
         return $this;
     }
@@ -144,7 +131,7 @@ class Collection extends ImageCollection implements SearchResultInterface
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function setItems(array $items = null)
+    public function setItems(?array $items = null)
     {
         return $this;
     }

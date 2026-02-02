@@ -9,11 +9,15 @@ use Magento\Backend\Block\Widget\Form\Container;
 class Edit extends Container
 {
     /**
+     * Core registry
+     *
      * @var \Magento\Framework\Registry
      */
     protected $coreRegistry;
 
     /**
+     * Current image record id
+     *
      * @var bool|int
      */
     protected $imageId = false;
@@ -35,6 +39,8 @@ class Edit extends Container
     }
 
     /**
+     * Remove Delete button if record can't be deleted.
+     *
      * @return void
      */
     protected function _construct()
@@ -52,6 +58,8 @@ class Edit extends Container
     }
 
     /**
+     * Retrieve the header text, either editing an existing record or creating a new one.
+     *
      * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()

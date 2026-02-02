@@ -89,6 +89,10 @@ class Save extends Action
 
         try {
             $model = $this->imageFactory->create();
+
+            // Set is_active to 0 by default for frontend submissions
+//            $data['is_active'] = 0; // already done in the database default value
+
             $model->setData($data);
             $model->save();
 

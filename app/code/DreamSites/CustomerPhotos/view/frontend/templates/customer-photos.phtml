@@ -1,28 +1,24 @@
 <?php
 $imageList = $block->getCustomerPhotos();
 ?>
-<div class="w-full bg-pink-50 py-8">
-    <div id="customer-photos-carousel" class="mx-auto max-w-7xl">
-        <h2 class="mb-8 text-xl text-center">Customer Gallery</h2>
-        <section class="splide mx-auto" aria-label="Customer Photos Carousel">
-            <div class="splide__track">
-                <div class="splide__list">
+<div class="customer-photos">
+    <div class="customer-photos__container">
+        <h2 class="customer-photos__title">Customer Gallery</h2>
+                <div id="customer-photos-carousel" class="customer-photos__carousel">
                     <?php foreach($imageList as $item): ?>
-                    <div class="splide__slide flex flex-col items-center gap-1">
-                        <div class="image-customer-photo">
-                            <img class="w-full" src="<?=$item->getMediaPath() ?>" alt="<?=$item->getCustomerName() ?>">
+                    <div class="customer-photos__item">
+                        <div class="customer-photos__image-wrapper image-customer-photo">
+                            <img class="customer-photos__image" data-lazy="<?=$item->getMediaPath() ?>" alt="<?=$item->getCustomerName() ?>">
                         </div>
-                        <p class="text-base font-semibold"><?=$item->getCustomerName() ?></p>
-                        <?php if (!empty($item->getInstagram())) { ?><p class="text-xs text-gray-500"><?=$item->getInstagram() ?></p><?php } ?>
-                        <p class="text-xs text-gray-600 text-center">wearing our</p>
-                        <p class="text-sm text-center"><a href="<?=$item->getProductDetails()[1] ?>"><?=$item->getProductDetails()[0] ?></a></p>
+                        <p class="customer-photos__name"><?=$item->getCustomerName() ?></p>
+                        <?php if (!empty($item->getInstagram())) { ?><p class="customer-photos__instagram"><?=$item->getInstagram() ?></p><?php } ?>
+                        <p class="customer-photos__wearing">wearing our</p>
+                        <p class="customer-photos__product-link"><a href="<?=$item->getProductDetails()[1] ?>"><?=$item->getProductDetails()[0] ?></a></p>
                     </div>
                     <?php endforeach; ?>
                 </div>
-            </div>
-        </section>
-        <div class="text-center">
-            <button onclick="location.href='/customerphotos'" class="mx-auto mt-16 text-base text-center primary__btn bg-pink-500 hover:bg-pink-600 text-white px-8 py-3 rounded-md font-semibold transition-all duration-300 inline-flex items-center space-x-2 transform hover:scale-105">Upload your photo</button>
+        <div class="customer-photos__actions">
+            <button onclick="location.href='/customerphotos'" class="customer-photos__upload-btn">Upload your photo</button>
         </div>
     </div>
 </div>

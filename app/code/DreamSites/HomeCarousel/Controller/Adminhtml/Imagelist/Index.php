@@ -27,6 +27,8 @@ class Index extends BackendAction
         $this->resultPageFactory = $resultPageFactory;
     }
     /**
+     * Check the permission to run it
+     *
      * @return bool
      */
     protected function _isAllowed()
@@ -35,6 +37,8 @@ class Index extends BackendAction
     }
 
     /**
+     * Index action
+     *
      * @return \Magento\Backend\Model\View\Result\Page
      */
     public function execute()

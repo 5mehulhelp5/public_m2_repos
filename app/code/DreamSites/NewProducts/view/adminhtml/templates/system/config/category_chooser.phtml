@@ -28,7 +28,9 @@ $categoryTree = $block->getCategoryTree();
 require(['jquery'], function($) {
     'use strict';
 
+    // Wait for DOM to be ready
     setTimeout(function() {
+        // Toggle expand/collapse - delegate from document for better reliability
         $(document).off('click.categorytoggle').on('click.categorytoggle', '.category-toggle', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -39,6 +41,7 @@ require(['jquery'], function($) {
             return false;
         });
 
+        // Also allow clicking the category name to expand (but not checkbox)
         $(document).off('click.categoryname').on('click.categoryname', '.category-tree-item.has-children > .category-name', function(e) {
             e.preventDefault();
             e.stopPropagation();
@@ -55,12 +58,15 @@ require(['jquery'], function($) {
         var searchTerm = $(this).val().toLowerCase();
 
         if (searchTerm === '') {
+            // Show all categories
             $('.category-tree-item').show();
             $('.category-tree-item').removeClass('expanded');
             $('.category-toggle').text('▶');
         } else {
+            // Hide all first
             $('.category-tree-item').hide();
 
+            // Show matching categories and their parents
             $('.category-name').each(function() {
                 var categoryName = $(this).text().toLowerCase();
                 if (categoryName.indexOf(searchTerm) !== -1) {
@@ -78,6 +84,7 @@ require(['jquery'], function($) {
         }
     });
 
+    // Handle checkbox selection
     $(document).on('change', '.category-checkbox', function() {
         var $checkbox = $(this);
         var isChecked = $checkbox.is(':checked');

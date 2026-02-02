@@ -1,0 +1,36 @@
+<div id="searchApp"
+     data-search-url="<?php echo $this->getFormSearchUrl(); ?>"
+     data-loading-gif="<?php echo $this->getViewFileUrl('DreamSites_DreamSearch::images/loading.gif'); ?>"
+     data-placeholder-image="<?php echo $this->getViewFileUrl('DreamSites_DreamSearch::images/product-image-not-found.jpg'); ?>">
+    <search-image-list
+        :search-url="searchUrl"
+        :loading-gif="loadingGif"
+        :placeholder-image="placeholderImage">
+    </search-image-list>
+</div>
+<script>
+    require([
+        'vue',
+        'DreamSites_DreamSearch/js/SearchImageListWrapper',
+        'domReady!'
+    ], function(Vue, SearchImageListComponent) {
+        const { createApp } = Vue;
+
+        const appElement = document.getElementById('searchApp');
+
+        const app = createApp({
+            data() {
+                return {
+                    searchUrl: appElement.dataset.searchUrl,
+                    loadingGif: appElement.dataset.loadingGif,
+                    placeholderImage: appElement.dataset.placeholderImage
+                }
+            },
+            components: {
+                'search-image-list': SearchImageListComponent
+            }
+        });
+
+        app.mount('#searchApp');
+    });
+</script>

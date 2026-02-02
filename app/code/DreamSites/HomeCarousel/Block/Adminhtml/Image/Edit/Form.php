@@ -38,6 +38,8 @@ class Form extends Generic
     }
 
     /**
+     * Prepare form for render
+     *
      * @return void
      */
     protected function _prepareLayout()
@@ -45,6 +47,7 @@ class Form extends Generic
         parent::_prepareLayout();
 
         /** @var \Magento\Framework\Data\Form $form */
+        //$form = $this->_formFactory->create();
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post', 'enctype' => 'multipart/form-data']]
         );
@@ -61,7 +64,7 @@ class Form extends Generic
         $yesNo[0] = 'No';
         $yesNo[1] = 'Yes';
 
-        $positions = $imageData->getAvailablePositions();
+        $horizontalPositions = $imageData->getAvailableHorizontalPositions();
         $verticalPositions = $imageData->getAvailableVerticalPositions();
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Basic Information')]);
@@ -185,15 +188,15 @@ class Form extends Generic
         );
 
         $fieldset->addField(
-            'position',
+            'horizontal_position',
             'select',
             [
-                'name' => 'position',
+                'name' => 'horizontal_position',
                 'label' => __('Text Position'),
                 'title' => __('Text Position'),
                 'class' => 'required-entry',
                 'required' => true,
-                'values' => $positions,
+                'values' => $horizontalPositions,
             ]
         );
 
@@ -270,7 +273,8 @@ class Form extends Generic
                     'title' => $imageData->getTitle(),
                     'carousel_name' => $imageData->getCarouselName(),
                     'sort_order' => $imageData->getSortOrder(),
-                    'position' => $imageData->getPosition(),
+                    'horizontal_position' => $imageData->getHorizontalPosition(),
+                    'vertical_position' => $imageData->getVerticalPosition(),
                     'heading' => $imageData->getHeading(),
                     'button_text' => $imageData->getButtonText(),
                     'image_filename' => $imageData->getImageFilename(),

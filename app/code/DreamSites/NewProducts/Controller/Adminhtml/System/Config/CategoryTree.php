@@ -13,9 +13,13 @@ use Magento\Framework\Controller\ResultFactory;
 class CategoryTree extends Action
 {
     /**
+     * Authorization level
+     */
     const ADMIN_RESOURCE = 'DreamSites_NewProducts::configuration';
 
     /**
+     * Render category tree
+     *
      * @return \Magento\Framework\View\Result\Layout
      */
     public function execute()

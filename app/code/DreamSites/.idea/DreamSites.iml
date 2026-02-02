@@ -5,6 +5,14 @@
       <sourceFolder url="file://$MODULE_DIR$/ImageUpload" isTestSource="false" packagePrefix="DreamSites\ImageUpload\" />
       <sourceFolder url="file://$MODULE_DIR$/spec" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/AliDropShipping/" isTestSource="false" packagePrefix="DreamSites\AliRipper\" />
+      <sourceFolder url="file://$MODULE_DIR$/Blog/" isTestSource="false" packagePrefix="DreamSites\Blog\" />
+      <sourceFolder url="file://$MODULE_DIR$/CustomerPhotos/" isTestSource="false" packagePrefix="DreamSites\CustomerPhotos\" />
+      <sourceFolder url="file://$MODULE_DIR$/HomeCarousel/" isTestSource="false" packagePrefix="DreamSites\HomeCarousel\" />
+      <sourceFolder url="file://$MODULE_DIR$/HomeProducts/app/code/DreamSites/HomeProducts" isTestSource="false" packagePrefix="DreamSites\HomeProducts\" />
+      <sourceFolder url="file://$MODULE_DIR$/NewProducts/" isTestSource="false" packagePrefix="DreamSites\NewProducts\" />
+      <sourceFolder url="file://$MODULE_DIR$/ReferaFriend/app/code/DreamSites/ReferaFriend" isTestSource="false" packagePrefix="DreamSites\ReferaFriend\" />
+      <sourceFolder url="file://$MODULE_DIR$/UltimateSearch/app/code/DreamSites/UltimateSearch" isTestSource="false" packagePrefix="DreamSites\ReferaFriend\" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -42,6 +42,8 @@ class Image extends AbstractModel
     }
 
     /**
+     * Initialize resource model
+     *
      * @return void
      */
     protected function _construct()

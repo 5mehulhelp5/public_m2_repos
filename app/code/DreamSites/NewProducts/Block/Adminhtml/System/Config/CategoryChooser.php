@@ -39,6 +39,8 @@ class CategoryChooser extends Template
     }
 
     /**
+     * Get selected category IDs from request
+     *
      * @return array
      */
     public function getSelectedCategories()
@@ -51,6 +53,8 @@ class CategoryChooser extends Template
     }
 
     /**
+     * Get category tree as array
+     *
      * @return array
      */
     public function getCategoryTree()
@@ -74,6 +78,8 @@ class CategoryChooser extends Template
     }
 
     /**
+     * Build tree structure from flat array
+     *
      * @param array $categories
      * @param int $parentId
      * @return array
@@ -96,6 +102,8 @@ class CategoryChooser extends Template
     }
 
     /**
+     * Check if category is selected
+     *
      * @param int $categoryId
      * @return bool
      */
@@ -105,6 +113,8 @@ class CategoryChooser extends Template
     }
 
     /**
+     * Render category tree recursively
+     *
      * @param array $categories
      * @param int $level
      * @return string
@@ -119,12 +129,14 @@ class CategoryChooser extends Template
 
             $html .= '<li class="category-tree-item' . ($hasChildren ? ' has-children' : '') . '" data-category-id="' . $this->escapeHtmlAttr($category['id']) . '">';
 
+            // Expand/collapse icon
             if ($hasChildren) {
                 $html .= '<span class="category-toggle">▶</span>';
             } else {
                 $html .= '<span class="category-toggle-spacer"></span>';
             }
 
+            // Checkbox
             $html .= '<label class="category-label">';
             $html .= '<input type="checkbox"
                              class="category-checkbox"
@@ -134,6 +146,7 @@ class CategoryChooser extends Template
             $html .= '<span class="category-name">' . $this->escapeHtml($category['name']) . '</span>';
             $html .= '</label>';
 
+            // Render children
             if ($hasChildren) {
                 $html .= $this->renderCategoryTree($category['children'], $level + 1);
             }

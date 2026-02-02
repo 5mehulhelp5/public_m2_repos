@@ -13,11 +13,15 @@ use DreamSites\CustomerPhotos\Model\ResourceModel\Image\Collection as ImageColle
 class CustomerPhotos extends Template
 {
     /**
+     * Image collection
+     *
      * @var ImageCollection
      */
     protected $_imageCollection;
 
     /**
+     * Image resource model
+     *
      * @var \DreamSites\CustomerPhotos\Model\ResourceModel\Image\CollectionFactory
      */
     protected $_imageColFactory;

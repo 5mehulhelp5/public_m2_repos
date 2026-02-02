@@ -36,6 +36,8 @@ class NewAction extends Action
     protected $_session;
 
     /**
+     * Initialize Group Controller
+     *
      * @param Context $context
      * @param Registry $coreRegistry
      * @param ForwardFactory $resultForwardFactory
@@ -66,6 +68,8 @@ class NewAction extends Action
     }
 
     /**
+     * Edit PageList item. Forward to new action.
+     *
      * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
      */
     public function execute()
